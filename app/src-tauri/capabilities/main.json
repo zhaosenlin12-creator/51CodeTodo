@@ -1,0 +1,11 @@
+{
+  "identifier": "main-local",
+  "description": "PomeTodo local window controls; storage is handled by scoped native commands",
+  "windows": ["main", "floating", "floating-preview", "context-menu"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-minimize",
+    "core:window:allow-close"
+  ]
+}

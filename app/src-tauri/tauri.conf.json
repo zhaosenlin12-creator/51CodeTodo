@@ -1,0 +1,38 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "51CodeTodo",
+  "version": "0.1.4",
+  "identifier": "com.pome.todo",
+  "build": {
+    "beforeDevCommand": "corepack pnpm dev",
+    "beforeBuildCommand": "corepack pnpm build",
+    "devUrl": "http://127.0.0.1:1427",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{
+      "label": "main",
+      "visible": false,
+      "title": "51CodeTodo 待办",
+      "width": 460,
+      "height": 880,
+      "minWidth": 400,
+      "minHeight": 560,
+      "decorations": false,
+      "dragDropEnabled": false,
+      "transparent": false,
+      "shadow": true,
+      "resizable": true,
+      "center": true
+    }],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": ["nsis"],
+    "shortDescription": "轻量本地待办",
+    "windows": { "nsis": { "installMode": "currentUser", "languages": ["SimpChinese"] } }
+  }
+}

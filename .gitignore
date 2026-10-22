@@ -1,0 +1,42 @@
+# --- 依赖与构建产物（不入库）---
+node_modules/
+app/node_modules/
+app/dist/
+app/artifacts/
+app/src-tauri/target/
+app/src-tauri/gen/
+target/
+dist/
+
+# --- 缓存与报告 ---
+.cache/
+coverage/
+test-results/
+playwright-report/
+*.log
+logs/
+
+# --- 环境与密钥 ---
+.env
+.env.*
+!.env.example
+secrets.dat
+
+# --- 本地数据（绝不入库）---
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+attachments/
+todos.json
+config.json
+server/data/
+
+# --- 本地交付暂存目录（安装包/日志/报告，不入库）---
+dist-deliver/
+
+# --- 系统/编辑器 ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

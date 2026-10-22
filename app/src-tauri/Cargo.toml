@@ -1,0 +1,46 @@
+[package]
+name = "pometodo-desktop"
+version = "0.1.4"
+edition = "2021"
+publish = false
+license = "GPL-3.0-only"
+description = "PomeTodo independent Windows todo application"
+
+[features]
+default = []
+official-services = []
+
+[lib]
+name = "pometodo_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.6.1", features = [] }
+
+[dependencies]
+pometodo-core = { path = "../crates/todo-core" }
+tauri = { version = "=2.11.1", features = ["tray-icon"] }
+tauri-plugin-single-instance = "=2.4.2"
+tauri-plugin-autostart = "=2.5.1"
+tauri-plugin-notification = "=2.3.3"
+tauri-plugin-dialog = "=2.7.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "=0.10.9"
+chrono = "0.4"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+arboard = "=3.6.1"
+clipboard-win = "=5.4.1"
+image = { version = "=0.25.10", default-features = false, features = ["png"] }
+reqwest = { version = "=0.12.28", default-features = false, features = ["blocking", "json", "native-tls", "system-proxy"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "=0.58.0", features = [
+  "Foundation", "Foundation_Collections", "Globalization", "Graphics_Imaging", "Media_Ocr",
+  "Storage_Streams", "Win32_System_WinRT", "Win32_Security_Cryptography", "Win32_System_Memory",
+  "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging", "Win32_Storage_Packaging_Appx"
+] }
+
+[dev-dependencies]
+tempfile = "3"

@@ -1,0 +1,17 @@
+.pome-statusbar { box-sizing: border-box; display: flex; align-items: center; gap: 12px; height: 34px; flex: 0 0 34px; padding: 0 14px; border-top: 1px solid var(--separator); background: var(--input-bg); color: var(--text-secondary); font: 11.5px / 14px var(--font); }
+/* 单行底栏：左侧统计/版本号 flex-shrink:0 不被挤压；右侧提示限宽，溢出省略并用 title 看全文。 */
+.pome-statusbar-content { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.pome-statusbar-hint { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; color: var(--text-tertiary); }
+.pome-statusbar-version { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; white-space: nowrap; cursor: pointer; }
+.pome-statusbar-version:hover:not(:disabled) { color: var(--text-primary); }
+.pome-statusbar-version:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+.pome-statusbar-version:disabled { cursor: default; opacity: .6; }
+.pome-status-message { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: 0; transform: translateY(4px); transition: opacity .18s ease-out, transform .18s ease-out; }
+.pome-status-message.visible { opacity: 1; transform: translateY(0); }
+.pome-status-message.info { color: var(--text-secondary); }
+/* 可恢复注意项：正文色加重，仅真正丢数据/删除失败/支付异常才用 error 红色。 */
+.pome-status-message.warn { color: var(--text-primary); font-weight: 600; }
+.pome-status-message.error { color: var(--red); }
+/* 左下角短提示出现时占统计位：允许收缩省略，同时隐藏右侧提示。 */
+.pome-statusbar:has(.pome-status-message) .pome-statusbar-content { flex-shrink: 1; min-width: 0; }
+.pome-statusbar:has(.pome-status-message) .pome-statusbar-hint { display: none; }

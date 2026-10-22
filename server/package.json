@@ -1,0 +1,16 @@
+{
+  "name": "51codetodo-sync-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "51CodeTodo 团队同步服务端（零依赖，Node.js 内置模块）",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "smoke": "node test/smoke.js",
+    "e2e": "node test/e2e-team.js",
+    "edge": "node test/security-edge.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,4 @@
+[workspace]
+members = ["crates/todo-core"]
+exclude = ["src-tauri"]
+resolver = "2"

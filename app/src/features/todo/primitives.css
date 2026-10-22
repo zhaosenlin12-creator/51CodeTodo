@@ -1,0 +1,459 @@
+/* sltool 基础控件；配色、字体与尺寸令牌统一由 app/theme.css 提供。 */
+
+.pometodo-todo,
+.pometodo-todo *,
+.pometodo-todo *::before,
+.pometodo-todo *::after {
+  box-sizing: border-box;
+}
+
+.pometodo-todo h3,
+.pometodo-todo p {
+  margin: 0;
+}
+
+@keyframes pometodoFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pometodoCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pometodoShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pometodoWindowScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+/* === Old WPF search === */
+.pometodo-todo .page-search { position: relative; display: flex; align-items: center; }
+.pometodo-todo .search-input-container { width: 100%; height: 34px; display: flex; align-items: center; background: var(--input-bg); border-radius: 6px; border: 1px solid var(--separator); overflow: hidden; }
+.pometodo-todo .search-input-container:focus-within { border-color: var(--accent-border); }
+.pometodo-todo .search-input-field { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; padding: 0; font: 400 12.5px var(--font); color: var(--text-primary); background: transparent; caret-color: var(--accent); }
+.pometodo-todo .search-input-field::placeholder { color: var(--text-tertiary); }
+.pometodo-todo .search-input-label { display: grid; place-items: center; flex: 0 0 32px; color: var(--text-muted); }
+.pometodo-todo .search-input-icon { width: 14px; height: 14px; }
+
+/* === Empty / Error state === */
+.pometodo-todo .page-empty-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+[data-theme="dark"] .pometodo-todo .page-empty-compact {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.pometodo-todo .empty-icon-compact {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--card-inner-bg);
+  border: 1px solid var(--separator);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.25) inset;
+}
+
+[data-theme="dark"] .pometodo-todo .empty-icon-compact {
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.03) inset;
+  color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.pometodo-todo .empty-icon-compact svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* === Skeleton === */
+.pometodo-todo .skeleton-line {
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--separator) 25%, var(--chip-hover-bg) 50%, var(--separator) 75%);
+  background-size: 200% 100%;
+  animation: pometodoShimmer 1.5s ease-in-out infinite;
+}
+
+.pometodo-todo .skeleton-line.short {
+  width: 32px;
+  height: 8px;
+}
+
+/* === Notification Card === */
+.pometodo-todo .notification {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+  background: var(--card-inner-bg);
+  border: 1px solid var(--separator);
+  border-radius: 1rem;
+  cursor: pointer;
+  --color: #32a6ff;
+  box-shadow: none;
+  animation: pometodoCardEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--enter-delay, 0) * 55ms);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100px;
+}
+
+.pometodo-todo .notification:hover {
+  border-color: var(--separator);
+}
+
+.pometodo-todo .notibar {
+  width: 1.5px;
+  margin: 10px 0 10px 8px;
+  border-radius: 1px;
+  background: var(--color);
+  flex-shrink: 0;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+  box-shadow: 0 0 3px color-mix(in srgb, var(--color) 20%, transparent);
+}
+
+.pometodo-todo .notification:hover .notibar {
+  transform: none;
+  box-shadow: none;
+}
+
+.pometodo-todo .notification .noticontent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pometodo-todo .notititle {
+  color: var(--color);
+  padding: 0.65rem 0.5rem 0.4rem 1rem;
+  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pometodo-todo .notification:hover .notititle {
+  transform: none;
+}
+
+.pometodo-todo .notibody {
+  color: var(--text-primary);
+  padding: 0 1rem 0.65rem;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  min-height: calc(2 * 1.5 * 14px);
+  word-break: break-all;
+}
+
+.pometodo-todo .notification:hover .notibody {
+  transform: none;
+}
+
+.pometodo-todo .notification.skeleton {
+  cursor: default;
+  pointer-events: none;
+  animation: none;
+  box-shadow: none;
+}
+
+.pometodo-todo .notification.skeleton .notibar {
+  background: var(--separator);
+}
+
+.pometodo-todo .notification.skeleton:hover {
+  box-shadow: none;
+}
+
+.pometodo-todo .notification.skeleton:hover .notititle,
+.pometodo-todo .notification.skeleton:hover .notibody,
+.pometodo-todo .notification.skeleton:hover .notibar {
+  transform: none;
+}
+
+/* === Card delete button === */
+.pometodo-todo .card-delete-btn {
+  background: transparent;
+  position: relative;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.pometodo-todo .card-delete-btn:hover {
+  opacity: 1 !important;
+}
+
+.pometodo-todo .card-delete-btn svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.2s linear;
+}
+
+.pometodo-todo .card-delete-btn:hover svg {
+
+  color: rgb(220, 38, 38);
+}
+
+/* === Dialog === */
+.pometodo-todo .dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: pometodoFadeIn 0.2s;
+}
+
+.pometodo-todo .dialog-content {
+  max-height: calc(100vh - 64px);
+  max-width: calc(100vw - 32px);
+  overflow-y: auto;
+  background: var(--panel-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 16px;
+  padding: 20px;
+  width: 300px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.25),
+    0 0 0 0.5px rgba(255, 255, 255, 0.5) inset;
+  animation: pometodoWindowScaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-content {
+  background: var(--panel-bg);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08) inset;
+}
+
+.pometodo-todo .dialog-content.large {
+  width: 360px;
+}
+
+.pometodo-todo .dialog-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 14px 0;
+  text-align: center;
+}
+
+.pometodo-todo .dialog-input {
+  width: 100%;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  padding: 0 12px;
+  outline: none;
+  margin-bottom: 10px;
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.25) inset;
+}
+
+.pometodo-todo .dialog-input:focus {
+  border-color: rgba(0, 0, 0, 0.25);
+  background: var(--input-focus-bg);
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-input {
+  background: var(--input-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-input:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pometodo-todo .dialog-textarea {
+  width: 100%;
+  min-height: 100px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  padding: 10px 12px;
+  outline: none;
+  resize: vertical;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.25) inset;
+}
+
+.pometodo-todo .dialog-textarea:focus {
+  border-color: rgba(0, 0, 0, 0.25);
+  background: var(--input-focus-bg);
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-textarea {
+  background: var(--input-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-textarea:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pometodo-todo .dialog-input.error {
+  border-color: var(--red);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-input.error {
+  box-shadow: none;
+}
+
+.pometodo-todo .dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.pometodo-todo .dialog-btn {
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: none;
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.pometodo-todo .dialog-btn.secondary {
+  background: var(--chip-bg);
+  color: var(--text-secondary);
+}
+
+.pometodo-todo .dialog-btn.secondary:hover {
+  background: var(--chip-hover-bg);
+}
+
+[data-theme="dark"] .pometodo-todo .dialog-btn.secondary {
+  background: var(--chip-bg);
+}
+
+.pometodo-todo .dialog-btn.save {
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: none;
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  background: #333;
+  color: white;
+}
+
+.pometodo-todo .dialog-btn.save:hover:not(:disabled) {
+  background: #333;
+
+
+}
+
+.pometodo-todo .dialog-btn.save:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+/* === Load more === */
+.pometodo-todo .clipboard-load-more {
+  align-self: center;
+  padding: 7px 16px;
+  border: 1px solid var(--separator);
+  border-radius: 8px;
+  background: var(--card-inner-bg);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  box-shadow: 0 0.5px 0 0 rgba(255, 255, 255, 0.25) inset;
+}
+
+.pometodo-todo .clipboard-load-more:hover {
+  background: var(--chip-bg);
+  color: var(--text-primary);
+}
+
+/* === Attachment hover preview === */
+.pometodo-todo .thumb-hover-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: pometodoFadeIn 0.15s ease;
+  pointer-events: none;
+}
+
+.pometodo-todo .thumb-hover-overlay img {
+  max-width: 70%;
+  max-height: 70%;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  object-fit: contain;
+}
+

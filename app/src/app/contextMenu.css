@@ -1,0 +1,7 @@
+:root[data-window="context-menu"], :root[data-window="context-menu"] body { background: transparent; }
+.pome-context-host { width: 100vw; height: 100vh; box-sizing: border-box; padding: 24px; user-select: none; color: var(--text-primary); font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif; }
+.pome-context-panel { box-sizing: border-box; width: 148px; padding: 4px; border: 1px solid var(--separator); border-radius: 8px; outline: none; background: var(--panel-bg); box-shadow: 0 8px 22px rgba(16,24,40,.16); }
+.pome-context-panel button { display: flex; align-items: center; justify-content: flex-start; width: 100%; height: 34px; box-sizing: border-box; padding: 8px 12px; border: 0; border-radius: 6px; background: transparent; color: inherit; font: 400 13px/18px "Segoe UI", "Microsoft YaHei UI", sans-serif; cursor: pointer; text-align: left; outline: none; }
+.pome-context-panel button:hover, .pome-context-panel button:focus-visible { background: var(--tray-hover); }
+.pome-context-panel [role="separator"] { margin: 4px 8px; height: 1px; background: var(--separator); }
+.pome-context-panel [role="alert"] { margin: 4px; color: var(--red); font-size: 11px; }

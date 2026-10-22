@@ -1,0 +1,37 @@
+@import "./theme.css";
+:root {
+  --pome-bg: var(--surface-bg); --pome-panel: var(--surface-bg);
+  --pome-text: var(--text-primary); --pome-muted: var(--text-secondary);
+  --pome-border: var(--separator); --pome-hover: var(--chip-hover-bg);
+  --pome-focus: var(--accent);
+}
+:where(button) { display: inline-flex; align-items: center; justify-content: center; line-height: 1.4; }
+button > svg { display: block; flex-shrink: 0; }
+*::-webkit-scrollbar { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track, *::-webkit-scrollbar-corner { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 2px; }
+*::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+html, body, #root { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { color: var(--pome-text); background: var(--pome-bg); }
+.pometodo-shell { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.pometodo-shell > .pome-titlebar { flex: 0 0 36px; display: flex; align-items: center; border-bottom: 1px solid var(--separator); background: var(--input-bg); user-select: none; }
+.pome-brand { display: flex; align-items: center; gap: 8px; flex: 1; height: 100%; padding-left: 12px; font-size: 12.5px; font-weight: 600; min-width: 0; color: var(--text-secondary); }
+.pome-mark { display: block; width: 16px; height: 16px; border-radius: 4px; object-fit: contain; }
+.pome-title-tools { display: flex; align-items: center; gap: 2px; padding-right: 8px; }
+.pome-icon-button { border: 0; border-radius: 5px; background: transparent; color: var(--text-muted); display: inline-grid; place-items: center; width: 28px; height: 26px; padding: 0; cursor: pointer; flex-shrink: 0; }
+.pome-icon-button svg { width: 13px; height: 13px; }
+.pome-icon-button:hover:not(:disabled) { color: var(--tool-btn-hover-color); background: var(--tool-btn-hover-bg); }
+.pome-icon-button[aria-pressed="true"] { color: var(--accent); background: var(--accent-bg); }
+.pome-icon-button[aria-pressed="true"]:hover:not(:disabled) { color: var(--accent); background: var(--accent-bg); }
+.pome-icon-button:disabled { opacity: .4; cursor: default; }
+.pome-icon-button:focus-visible { outline: 2px solid var(--pome-focus); outline-offset: 2px; }
+.pome-close-button:hover:not(:disabled) { color: var(--close-btn-hover-color); background: var(--close-btn-hover-bg); }
+.pome-title-divider { width: 1px; height: 16px; background: var(--pome-border); margin: 0 6px; }
+.pome-content { flex: 1; min-height: 0; overflow: hidden; position: relative; }
+.pome-page { height: 100%; min-height: 0; box-sizing: border-box; }
+.pome-page[hidden] { display: block; visibility: hidden; position: absolute; inset: 0; pointer-events: none; }
+.pome-startup-state { max-width: 360px; padding: 48px 12px; margin: auto; line-height: 1.8; }
+.pome-startup-state h1 { font-size: 20px; margin-bottom: 12px; }
+.pome-startup-state p { color: var(--pome-muted); overflow-wrap: anywhere; font-size: 14px; }
+.pome-action-error { position: fixed; bottom: 18px; left: 18px; right: 18px; z-index: 1100; display: flex; align-items: center; gap: 8px; padding: 12px 14px; font-size: 13px; line-height: 1.5; border: 1px solid #dc6666; border-radius: 10px; background: var(--pome-panel); box-shadow: 0 4px 18px rgba(0, 0, 0, .12); }
+.pome-action-error button { margin-left: auto; border: 0; background: transparent; color: inherit; font-size: 20px; cursor: pointer; }

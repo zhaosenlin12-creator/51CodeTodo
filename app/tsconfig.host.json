@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/app", "src/native", "src/contracts", "src/env.d.ts"]
+}

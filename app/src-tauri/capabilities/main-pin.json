@@ -1,0 +1,9 @@
+{
+  "identifier": "main-pin",
+  "description": "Allow the main window pin button to read and toggle its always-on-top state",
+  "windows": ["main"],
+  "permissions": [
+    "core:window:allow-is-always-on-top",
+    "core:window:allow-set-always-on-top"
+  ]
+}

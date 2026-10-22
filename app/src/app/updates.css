@@ -1,0 +1,22 @@
+.update-panel { height: 100%; box-sizing: border-box; overflow-y: auto; padding: 6px 16px 14px; color: var(--text-primary); font: 400 13px/1.5 var(--font); }
+.update-panel h2, .update-panel p, .update-panel pre { margin: 0; }
+.update-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.update-header h2 { font: 600 14px/20px var(--font); }
+.update-button { display: inline-flex; align-items: center; justify-content: center; min-height: 30px; padding: 5px 11px; border: 1px solid var(--separator); border-radius: 6px; background: var(--panel-bg); color: var(--text-secondary); font: 400 12px/18px var(--font); cursor: pointer; transition: background .15s, color .15s; }
+.update-button:hover:not(:disabled) { background: var(--input-bg); color: var(--text-primary); }
+.update-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.update-button:disabled { cursor: default; opacity: .5; }
+.update-button.update-primary { background: var(--button-solid-bg); border-color: transparent; color: var(--button-solid-text); }
+.update-button.update-primary:hover:not(:disabled) { background: var(--button-solid-hover); color: var(--button-solid-text); }
+.update-version { font-size: 14px; font-weight: 600; }
+.update-version span { margin-left: 10px; color: var(--text-muted); font-size: 11.5px; font-weight: 400; }
+.update-date { margin-top: 3px; color: var(--text-muted); font-size: 11.5px; }
+.update-notes { margin-top: 12px; padding: 11px; border: 1px solid var(--separator); border-radius: 8px; background: var(--input-bg); color: var(--text-secondary); font: 400 12px/1.7 var(--font); font-family: var(--font); white-space: pre-wrap; overflow-wrap: anywhere; }
+.update-hint { margin-top: 10px; color: var(--text-muted); font-size: 11.5px; line-height: 1.7; }
+.update-error { margin-top: 10px; color: var(--red); font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+.update-panel .update-button, .update-panel .update-progress { margin-top: 14px; }
+.update-progress-track { width: 100%; max-width: 320px; height: 5px; border-radius: 3px; background: var(--separator); overflow: hidden; }
+.update-progress-track span { display: block; height: 100%; border-radius: 3px; background: var(--button-solid-bg); transition: width .2s ease-out; }
+.update-progress-track span.indeterminate { width: 40% !important; animation: update-progress-slide 1.2s ease-in-out infinite; }
+@keyframes update-progress-slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+.update-progress-text { display: block; margin-top: 6px; color: var(--text-muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }

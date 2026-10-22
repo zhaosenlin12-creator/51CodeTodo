@@ -1,0 +1,33 @@
+{
+  "name": "pometodo-desktop",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "version": "0.1.4",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 1427 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "check:host": "tsc --project tsconfig.host.json --noEmit",
+    "test": "vitest run",
+    "test:host": "vitest run src/native",
+    "test:core": "cargo test -p pometodo-core --locked",
+    "tauri": "tauri",
+    "build:desktop": "tauri build --no-bundle",
+    "build:installer": "node scripts/build-installer.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.11.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.11.1",
+    "@types/node": "24.12.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
+    "typescript": "6.0.2",
+    "vite": "8.0.12",
+    "vitest": "4.1.9"
+  }
+}

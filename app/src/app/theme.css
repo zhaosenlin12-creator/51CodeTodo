@@ -1,0 +1,60 @@
+/* 外观以旧 WPF 的 Themes/Light、Dark 和 TwinToolShell 字体/尺寸为基准。
+ * 独立 CSS 令牌供全应用使用，不引入旧工程依赖；保留 sltool 的交互动效。 */
+:root {
+  --font: "Segoe UI Variable", "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --font-mono: "SF Mono", "Menlo", "Consolas", monospace;
+  --text-xs: 11.5px; --text-sm: 12.5px; --text-base: 14px; --text-md: 15px; --text-lg: 17px;
+  --weight-light: 300; --weight-normal: 400; --weight-medium: 500; --weight-semibold: 600;
+  --page-header-inset: 16px; --page-action-width: 86px; --page-action-height: 35px;
+  --page-action-bg: var(--button-solid-bg); --page-action-text: var(--button-solid-text); --page-action-hover: var(--button-solid-hover);
+  --bg-primary: #f9fafb; --bg-card: #fff; --bg-card-hover: #fff;
+  --text-primary: #181b1f; --text-secondary: #52565b; --text-muted: #83868b; --text-tertiary: #acaeb1;
+  --separator: #e2e5e8; --accent: #026fd7; --accent-bg: #e7f3ff; --accent-border: #b4d0f5; --danger: #d74745;
+  --panel-bg: #fff; --card-inner-bg: #fff; --card-border: #e2e5e8;
+  --input-bg: #f5f7f9; --input-focus-bg: #fff;
+  --chip-bg: #f5f7f9; --chip-hover-bg: #e5e8eb;
+  --tool-btn-bg: rgba(0,0,0,.06); --tool-btn-color: rgba(60,60,67,.7);
+  --tool-btn-hover-bg: rgba(0,0,0,.1); --tool-btn-hover-color: rgba(60,60,67,.9);
+  --close-btn-bg: rgba(0,0,0,.05); --close-btn-color: rgba(60,60,67,.6);
+  --close-btn-hover-bg: rgba(255,59,48,.12); --close-btn-hover-color: #ff3b30;
+  --settings-module-summary-bg: #fff; --settings-module-summary-border: #e2e5e8;
+  --scroll-thumb: #dbdee1; --focus-ring: var(--accent); --segment-selected-bg: #fff;
+  --surface-bg: #f9fafb;
+  --button-solid-bg: #181b1f; --button-solid-text: #fff; --button-solid-hover: #252a30;
+  --red: #d74745; --red-soft: #ffe8e4; --red-border: #fdc9c4;
+  --amber: #ce871b; --amber-text: #8e5400; --amber-soft: #ffefd4; --amber-border: #f3d9a8;
+  --blue: #0085c5; --blue-soft: #dff6ff; --blue-border: #b2d7ee;
+  --green: #4e9a52; --green-soft: #e2fae2; --green-border: #bfe3c2; --green-hover: #d4f1d4;
+  --stripe-normal: #ced1d4;
+  --card-hover-shadow: 28,37,53; --card-hover-border: #d4d8db; --tray-hover: #f5f7f9;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg-primary: #15191e; --bg-card: #1d2228; --bg-card-hover: #242930;
+  --text-primary: #eff2f5; --text-secondary: #babec3; --text-muted: #888d92; --text-tertiary: #5f6469;
+  --separator: #31363d; --accent: #547ead; --accent-bg: #273444; --accent-border: #425c79; --danger: #f66d67;
+  --panel-bg: #1d2228; --card-inner-bg: #1d2228; --card-border: #31363d;
+  --input-bg: #242930; --input-focus-bg: #1d2228;
+  --chip-bg: #242930; --chip-hover-bg: #33383f;
+  --tool-btn-bg: rgba(255,255,255,.08); --tool-btn-color: rgba(255,255,255,.6);
+  --tool-btn-hover-bg: rgba(255,255,255,.14); --tool-btn-hover-color: rgba(255,255,255,.9);
+  --close-btn-bg: rgba(255,255,255,.06); --close-btn-color: rgba(255,255,255,.5);
+  --close-btn-hover-bg: rgba(255,59,48,.15); --close-btn-hover-color: #ff453a;
+  --settings-module-summary-bg: #1d2228; --settings-module-summary-border: #31363d;
+  --scroll-thumb: #3e4349; --surface-bg: #15191e; --segment-selected-bg: #15191e;
+  --button-solid-bg: #424850; --button-solid-text: #fff; --button-solid-hover: #525a64;
+  --red: #f66d67; --red-soft: #572220; --red-border: #7d3734;
+  --amber: #eca851; --amber-text: #f4c582; --amber-soft: #492f0e; --amber-border: #6b4b1d;
+  --blue: #578aa6; --blue-soft: #223641; --blue-border: #3a5668;
+  --green: #6dc272; --green-soft: #1e3b1f; --green-border: #356d38; --green-hover: #284e2a;
+  --stripe-normal: #494d53;
+  --card-hover-shadow: 154,164,178; --card-hover-border: #5f6b7a; --tray-hover: #2c3137;
+  color-scheme: dark;
+}
+html { font: var(--text-base) var(--font); -webkit-font-smoothing: antialiased; }
+button, input, textarea { font-family: var(--font); }
+button { font-size: var(--text-sm); }
+/* 中文字形的视觉中心略低于行框中心；顶部主按钮统一作 1px 光学补偿。 */
+.page-action-label { position: relative; top: -1px; }
+@keyframes pomeMenuIn { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes pomePageEnter { from { opacity: 0; } to { opacity: 1; } }

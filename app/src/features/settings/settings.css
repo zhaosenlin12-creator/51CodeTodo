@@ -1,0 +1,848 @@
+/* 设置保留旧 WPF 功能；使用 app/theme.css 中的 sltool 视觉令牌。 */
+
+.pometodo-settings,
+.pometodo-settings *,
+.pometodo-settings *::before,
+.pometodo-settings *::after {
+  box-sizing: border-box;
+}
+
+.pometodo-settings {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.pometodo-settings .settings-scroll { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 14px 16px;
+  overflow-x: hidden;
+}
+
+.pometodo-settings .settings-groups {
+  display: grid;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* === Top bar === */
+.pometodo-settings .settings-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 15px var(--page-header-inset) 12px;
+  background: var(--panel-bg);
+  border-bottom: 1px solid var(--separator);
+}
+
+.pometodo-settings .settings-topbar-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.pometodo-settings .settings-title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: var(--weight-semibold);
+}
+
+.pometodo-settings .settings-subtitle {
+  font-size: 11.5px;
+  line-height: 17px;
+  color: var(--text-muted);
+}
+
+.pometodo-settings .settings-loading {
+  padding: 24px 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+/* === Notice === */
+.pometodo-settings .settings-notice {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--separator);
+  border-radius: 10px;
+  background: var(--panel-bg);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-notice.error {
+  border-color: color-mix(in srgb, var(--danger) 32%, var(--separator));
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-notice.success {
+  border-color: color-mix(in srgb, var(--accent) 32%, var(--separator));
+}
+
+.pometodo-settings .settings-notice span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pometodo-settings .settings-notice-close {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-notice-close:hover {
+  background: var(--chip-hover-bg);
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-notice-close svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* === Group cards === */
+.pometodo-settings .settings-button.settings-back { display: inline-flex; align-items: center; justify-content: center; height: var(--page-action-height); min-width: var(--page-action-width); padding: 0 18px; font: 600 12.5px/18px var(--font); }
+.pometodo-settings .settings-card {
+  border: 1px solid var(--settings-module-summary-border);
+  border-radius: 10px;
+  background: var(--settings-module-summary-bg);
+  padding: 0;
+  flex-shrink: 0;
+}
+.pometodo-settings .settings-card.open { background: var(--card-inner-bg); border-color: var(--card-border); box-shadow: 0 .5px 0 rgba(255,255,255,.3) inset; }
+.pometodo-settings .settings-card.settings-focus-flash { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); transition: border-color .3s ease-out, box-shadow .3s ease-out; }
+[data-theme="dark"] .pometodo-settings .settings-card.open { box-shadow: 0 .5px 0 rgba(255,255,255,.04) inset; }
+
+.pometodo-settings .settings-card-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  min-height: 34px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  text-align: left;
+  justify-content: space-between;
+}
+
+.pometodo-settings .settings-card-toggle:hover .settings-card-title {
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-card-chevron {
+  color: var(--text-secondary);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform .2s ease;
+}
+.pometodo-settings .settings-card.open .settings-card-chevron { transform: rotate(180deg); }
+.pometodo-settings .settings-card-content-shell { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .18s ease-out, opacity .18s ease-out; }
+.pometodo-settings .settings-card.open .settings-card-content-shell { grid-template-rows: 1fr; opacity: 1; }
+.pometodo-settings .settings-card-content { min-height: 0; overflow: hidden; }
+
+.pometodo-settings .settings-card-title {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+.pometodo-settings .settings-card > h2.settings-card-title { padding: 7px 10px; min-height: 34px; display: flex; align-items: center; }
+.pometodo-settings .settings-card .settings-card-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 12px; min-height: 46px; }
+.pometodo-settings .settings-card .settings-card-header .settings-card-title { min-width: 0; }
+
+.pometodo-settings .settings-card-body {
+  margin-top: 0;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pometodo-settings .settings-card-body.settings-card-title-divider {
+  border-top: 1px solid var(--separator);
+}
+.pometodo-settings .settings-card-body > .settings-stack + .settings-stack { margin-top: 16px; }
+
+/* === Rows === */
+.pometodo-settings .settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
+.pometodo-settings .settings-row + .settings-row { border-top: 1px solid var(--separator); }
+
+.pometodo-settings .settings-row-stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.pometodo-settings .settings-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pometodo-settings .settings-row-title {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-row-hint {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.pometodo-settings .settings-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 自带 Key 区块：服务商与 Key 输入放在同一圆角容器内。 */
+.pometodo-settings .settings-key-box {
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card-inner-bg);
+}
+.pometodo-settings .settings-input-key { background: var(--panel-bg); }
+/* 服务来源内联折叠：与设置分组标题展开动效一致。 */
+.pometodo-settings .settings-inline-toggle-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 2px 0; border: none; background: transparent; color: var(--text-secondary); font-family: var(--font); font-size: var(--text-sm); font-weight: var(--weight-semibold); cursor: pointer; text-align: left; }
+.pometodo-settings .settings-inline-toggle-head:hover { color: var(--text-primary); }
+.pometodo-settings .settings-inline-toggle-head .settings-card-chevron { transition: transform .2s ease; }
+.pometodo-settings .settings-inline-toggle-head.open .settings-card-chevron { transform: rotate(180deg); }
+.pometodo-settings .settings-inline-toggle-body { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .18s ease-out, opacity .18s ease-out; }
+.pometodo-settings .settings-inline-toggle.open > .settings-inline-toggle-body { grid-template-rows: 1fr; opacity: 1; }
+.pometodo-settings .settings-inline-toggle-grid { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
+
+/* === Switch === */
+.pometodo-settings .settings-switch {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0,0,0,.15);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .pometodo-settings .settings-switch { background: rgba(255,255,255,.15); }
+
+.pometodo-settings .settings-switch .settings-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.18), 0 0 0 .5px rgba(0,0,0,.04);
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+
+.pometodo-settings .settings-switch.on,
+[data-theme="dark"] .pometodo-settings .settings-switch.on {
+  background: var(--accent);
+}
+
+.pometodo-settings .settings-switch.on .settings-switch-thumb {
+  transform: translateX(16px);
+}
+
+.pometodo-settings .settings-switch:disabled {
+  cursor: default;
+}
+
+/* === Segmented options === */
+.pometodo-settings .settings-segment {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--separator);
+  border-radius: 10px;
+  background: var(--input-bg);
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-segment button {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pometodo-settings .settings-segment button:not([aria-pressed="true"]):hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-segment button[aria-pressed="true"] {
+  background: var(--segment-selected-bg);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
+}
+
+.pometodo-settings .settings-segment button:disabled {
+  cursor: default;
+}
+/* 场景切换：选中指示器平滑滑动（按钮本体透明）。 */
+.pometodo-settings .settings-segment.sliding-segment { position: relative; }
+.pometodo-settings .settings-segment.sliding-segment button { position: relative; z-index: 1; background: transparent; }
+.pometodo-settings .settings-segment.sliding-segment button[aria-pressed="true"] { background: transparent; box-shadow: none; }
+.pometodo-settings .settings-segment.sliding-segment button[aria-pressed="true"]:hover { background: transparent; }
+.pometodo-settings .sliding-segment-thumb { position: absolute; top: 3px; bottom: 3px; border-radius: 7px; background: var(--segment-selected-bg); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14); transition: left .28s cubic-bezier(.22,1,.36,1), width .28s cubic-bezier(.22,1,.36,1); }
+
+
+/* === Close action radios === */
+.pometodo-settings .settings-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pometodo-settings .settings-radio-option {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 8px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font);
+  text-align: left;
+  align-items: center;
+  justify-content: flex-start;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.pometodo-settings .settings-radio-dot { width: 18px; height: 18px; border: 1.5px solid var(--text-tertiary); border-radius: 50%; flex: 0 0 18px; display: grid; place-items: center; }
+.pometodo-settings .settings-radio-option + .settings-radio-option { border-top: 1px solid var(--separator); border-radius: 0; }
+.pometodo-settings .settings-radio-option:hover:not(:disabled) .settings-radio-dot,
+.pometodo-settings .settings-radio-option.selected .settings-radio-dot { border-color: var(--accent); }
+.pometodo-settings .settings-radio-option.selected .settings-radio-dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.pometodo-settings .settings-radio-copy { display: flex; flex-direction: column; gap: 2px; }
+
+.pometodo-settings .settings-radio-option:disabled {
+  cursor: default;
+}
+
+.pometodo-settings .settings-radio-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-normal);
+}
+
+/* === Inputs === */
+.pometodo-settings .settings-input {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--card-border);
+  border-radius: 9px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  outline: none;
+}
+
+.pometodo-settings .settings-input:focus {
+  border-color: var(--focus-ring);
+}
+
+.pometodo-settings .settings-input:read-only:not(:focus) {
+  opacity: 0.85;
+  cursor: default;
+}
+
+.pometodo-settings .settings-input.error {
+  border-color: var(--danger);
+}
+
+.pometodo-settings .customer-label-input { width: 140px; }
+.pometodo-settings .settings-input-center {
+  text-align: center;
+}
+
+.pometodo-settings .settings-input-time {
+  width: 88px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-input-compact {
+  height: 28px;
+  font-size: var(--text-sm);
+}
+
+.pometodo-settings .settings-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pometodo-settings .settings-input-row .settings-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.pometodo-settings .settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pometodo-settings .settings-field-days {
+  flex: 0 0 96px;
+}
+
+.pometodo-settings .settings-field-error {
+  color: var(--danger);
+  font-size: var(--text-xs);
+}
+
+/* === Buttons === */
+.pometodo-settings .settings-button {
+  height: 31px;
+  min-width: 70px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--tool-btn-color);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-button:hover:not(:disabled) {
+  background: var(--tool-btn-hover-bg);
+  color: var(--tool-btn-hover-color);
+}
+
+.pometodo-settings .settings-button.primary {
+  background: var(--button-solid-bg);
+  color: var(--button-solid-text);
+}
+
+.pometodo-settings .settings-button.primary:hover:not(:disabled) {
+  background: var(--button-solid-hover);
+  color: var(--button-solid-text);
+
+
+}
+
+.pometodo-settings .settings-button.settings-back {
+  background: var(--page-action-bg);
+  color: var(--page-action-text);
+}
+
+.pometodo-settings .settings-button.settings-back:hover:not(:disabled) {
+  background: var(--page-action-hover);
+  color: var(--page-action-text);
+}
+
+.pometodo-settings .settings-button.danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+.pometodo-settings .settings-button.danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 88%, #000);
+  color: #fff;
+}
+
+.pometodo-settings .settings-button:disabled {
+  cursor: default;
+}
+
+.pometodo-settings .settings-button-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* === Quick due chips === */
+.pometodo-settings .settings-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pometodo-settings .settings-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 6px 3px 10px;
+  border: 1px solid var(--separator);
+  border-radius: 999px;
+  background: var(--chip-bg);
+}
+
+.pometodo-settings .settings-chip-label {
+  padding: 2px 2px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.pometodo-settings .settings-chip-label:hover:not(:disabled) {
+  color: var(--accent);
+}
+
+.pometodo-settings .settings-chip-remove {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pometodo-settings .settings-chip-remove:hover:not(:disabled) {
+  background: rgba(216, 68, 68, 0.12);
+  color: var(--danger);
+}
+
+.pometodo-settings .settings-chip-remove:disabled {
+  cursor: default;
+}
+
+.pometodo-settings .settings-chip-add {
+  padding: 3px 12px;
+  border: 1px dashed var(--separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.pometodo-settings .settings-chip-add:hover:not(:disabled) {
+  background: var(--chip-hover-bg);
+  color: var(--text-primary);
+}
+
+/* === Inline editor === */
+.pometodo-settings .settings-inline-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--separator);
+  border-radius: 10px;
+  background: var(--input-bg);
+}
+
+.pometodo-settings .settings-inline-grid {
+  display: flex;
+  gap: 10px;
+}
+
+.pometodo-settings .settings-inline-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* === Customers === */
+.pometodo-settings .settings-customer-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--input-bg);
+}
+
+.pometodo-settings .settings-customer-list:empty {
+  display: none;
+}
+
+.pometodo-settings .settings-customer-list > .settings-row-hint {
+  padding: 10px 12px;
+}
+
+.pometodo-settings .settings-customer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  min-height: 40px;
+}
+
+.pometodo-settings .settings-customer-row + .settings-customer-row {
+  border-top: 1px solid var(--separator);
+}
+
+.pometodo-settings .settings-customer-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pometodo-settings .settings-customer-count {
+  min-width: 22px;
+  padding: 1px 8px;
+  border: 1px solid var(--separator);
+  border-radius: 999px;
+  background: var(--panel-bg);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-customer-actions {
+  display: inline-flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.pometodo-settings .settings-icon-button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pometodo-settings .settings-icon-button:hover:not(:disabled) {
+  background: var(--chip-hover-bg);
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-icon-button.danger:hover:not(:disabled) {
+  background: rgba(216, 68, 68, 0.12);
+  color: var(--danger);
+}
+
+.pometodo-settings .settings-icon-button:disabled {
+  cursor: default;
+}
+
+.pometodo-settings .settings-icon-button svg {
+  width: 13px;
+  height: 13px;
+}
+
+.pometodo-settings .settings-rename-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* === API key providers === */
+.pometodo-settings .settings-key-provider-segment button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.pometodo-settings .settings-key-provider-segment button.settings-key-provider-configured {
+  color: var(--accent);
+  font-weight: var(--weight-medium);
+}
+
+.pometodo-settings .settings-key-provider-segment button.settings-key-provider-configured[aria-pressed="true"] {
+  background: var(--accent-bg);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+.pometodo-settings .settings-key-provider-segment svg {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+}
+
+/* === Preview lists === */
+.pometodo-settings .settings-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.pometodo-settings .settings-preview-row {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.pometodo-settings .settings-preview-label {
+  flex: 0 0 36px;
+  color: var(--text-secondary);
+}
+
+/* === Overlay dialog === */
+.pometodo-settings .settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.pometodo-settings .settings-dialog {
+  width: 100%;
+  max-width: 380px;
+  max-height: 100%;
+  overflow-y: auto;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--panel-bg);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+  padding: 16px;
+}
+
+.pometodo-settings .settings-dialog-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pometodo-settings .settings-dialog-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+
+.pometodo-settings .settings-dialog-close {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pometodo-settings .settings-dialog-close:hover:not(:disabled) {
+  background: var(--chip-hover-bg);
+  color: var(--text-primary);
+}
+
+.pometodo-settings .settings-dialog-close:disabled {
+  cursor: default;
+}
+
+.pometodo-settings .settings-dialog-close svg {
+  width: 13px;
+  height: 13px;
+}
+
+.pometodo-settings .settings-dialog-message {
+  margin: 10px 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.pometodo-settings .settings-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* 临时写入只阻止重复操作；持续不可用的控件才降低对比度。 */
+.pometodo-settings [data-unavailable="true"] { opacity: .5; }
+.pometodo-settings[aria-busy="true"] :disabled { cursor: wait; }
+
+/* === Focus visibility === */
+.pometodo-settings button:focus-visible,
+.pometodo-settings input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.pometodo-settings .settings-opacity-range {
+  width: 180px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.pometodo-settings .settings-opacity-range:disabled { cursor: default; opacity: 0.6; }

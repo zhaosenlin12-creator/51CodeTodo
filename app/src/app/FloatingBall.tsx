@@ -236,17 +236,36 @@ export function FloatingBall({ previewOnly = false }: { previewOnly?: boolean })
         <span className="pome-float-shadow" aria-hidden="true" />
         <span className="pome-float-ring" aria-hidden="true" />
         <span ref={ebHost} className="pome-float-face" aria-hidden="true" />
-        {tasks.length > 0 && <span className="pome-float-count">{tasks.length}</span>}
+        {(() => {
+          const now = new Date();
+          const urgent = tasks.filter(t => {
+            const tone = getTodoDueInfo(t, now, { today: "", tomorrow: "", onTime: "", late: () => "", unscheduled: "", clear: "", expiringToday: "" })?.tone;
+            return tone === "overdue" || tone === "today";
+          }).length;
+          return urgent > 0 ? <span className="pome-float-count">{urgent}</span> : null;
+        })()}
       </button>
     </div>}
     {previewOnly && <div className="pome-float-card-layer" inert={!expanded} aria-hidden={!expanded}>
       <div className="pome-float-arrow" />
       <section id="floating-preview" className="pome-float-panel" aria-label="最近待办">
         {error && <p className="pome-float-error" role="alert">{error}</p>}
-        <div className="pome-float-tasks">{tasks.slice(0, 3).map(task => {
+        {(() => {
+          const now = new Date();
+          const open = tasks.length;
+          const inProgress = tasks.filter(t => t.status === "in_progress").length;
+          const overdue = tasks.filter(t => getTodoDueInfo(t, now, { today: "", tomorrow: "", onTime: "", late: () => "", unscheduled: "", clear: "", expiringToday: "" })?.tone === "overdue").length;
+          return <div className="pome-float-summary">
+            <span>{open} 项待办</span>
+            <span>{inProgress} 进行中</span>
+            {overdue > 0 && <span className="overdue">{overdue} 逾期</span>}
+          </div>;
+        })()}
+        <div className="pome-float-tasks">{tasks.slice(0, 5).map(task => {
           const wordPack = wordPackFor(customerLabel ?? undefined);
           const due = getTodoDueInfo(task, new Date(), { today: `今天${wordPack.dueWord}`, tomorrow: `明天${wordPack.dueWord}`, onTime: `按时${wordPack.dueWord}`, late: days => `逾期 ${days} 天${wordPack.dueWord}`, unscheduled: `未设${wordPack.dueWord}日期`, clear: `不设${wordPack.dueWord}日期`, expiringToday: `${wordPack.todayWord}到期` });
-          return <button className="pome-float-task" key={task.id} onClick={() => void open(task.id)}>
+          const overdueRow = due?.tone === "overdue";
+          return <button className={`pome-float-task${overdueRow ? " overdue" : ""}`} key={task.id} onClick={() => void open(task.id)}>
             <div className="pome-float-task-heading">
               <span className={`pome-float-status ${task.status}`} aria-label={task.status === "in_progress" ? "进行中" : "未完成"} />
               <strong>{task.title}</strong>

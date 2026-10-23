@@ -35,6 +35,10 @@
 .pome-floating-shell .pome-float-view-all { display: block; width: 100%; text-align: right; border-top: .8px solid var(--separator); padding: 8px 0 0; margin-top: 0; font-size: 11.5px; font-weight: 500; color: var(--accent); }
 .pome-float-view-all:hover { text-decoration: underline; }
 .pome-float-error { font-size: 11.5px; line-height: 17px; color: var(--red); margin: 0 0 6px; }
+.pome-float-summary { display: flex; align-items: center; gap: 10px; padding: 2px 0 8px; font-size: 11.5px; font-weight: 500; color: var(--text-secondary); }
+.pome-float-summary .overdue { color: var(--red); font-weight: 700; }
+.pome-float-task.overdue { background: var(--red-soft); }
+.pome-float-task.overdue:hover { background: var(--red-soft); filter: brightness(.97); }
 .preview-only .pome-float-card-layer { margin-top: 0; padding-top: 22px; padding-bottom: 22px; }
 .preview-only .pome-float-panel { max-height: calc(100vh - 44px); }
 .preview-only .pome-float-arrow { top: 17px; }

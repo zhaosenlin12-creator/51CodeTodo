@@ -59,6 +59,7 @@ async fn with_mutation<T: Send + 'static>(
 ) -> Result<T, String> {
     let result = with_storage(app.clone(), operation).await?;
     let _ = app.emit("pometodo-data-changed", ());
+    #[cfg(windows)]
     if let Err(error) = crate::floating::refresh(&app) {
         let _ = app.emit("pometodo-system-error", error);
     }

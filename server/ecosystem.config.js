@@ -12,7 +12,7 @@ module.exports = {
         // 若没有反代、需要直接对外，再改为 0.0.0.0（不推荐，公网请走 HTTPS 反代）。
         HOST: "127.0.0.1",
         PORT: "3170",
-        ACCESS_TOKEN: "在这里换成你的强随机令牌",
+        ACCESS_TOKEN: "sjFIWI23DD223DSAs12ffi22301FJQWASA1",
       },
     },
   ],

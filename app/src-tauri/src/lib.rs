@@ -1,13 +1,18 @@
 mod ai_extract;
 mod ai_http;
 mod auto_backup;
+#[cfg(windows)]
 mod clipboard;
 mod commands;
+#[cfg(windows)]
 mod context_menu;
 mod distribution;
 mod file_commands;
+#[cfg(windows)]
 mod floating;
+#[cfg(windows)]
 mod local_extract;
+#[cfg(windows)]
 mod ocr;
 #[cfg(feature = "official-services")]
 mod official;
@@ -19,18 +24,23 @@ mod smart_arrange;
 mod sync;
 mod sync_http;
 mod updates;
+#[cfg(windows)]
 mod window_effects;
+#[cfg(windows)]
 mod window_geometry;
+
+#[cfg(not(windows))]
+mod mobile_stub;
 
 use commands::StorageState;
 use std::sync::Arc;
-use tauri::{
-    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
-    Emitter, Manager,
-};
+#[cfg(windows)]
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::{Emitter, Manager};
 
 fn show_window(app: &tauri::AppHandle) {
     if let Some(window) = app.get_webview_window("main") {
+        #[cfg(windows)]
         let _ = window.unminimize();
         let _ = window.show();
         let _ = window.set_focus();
@@ -46,22 +56,27 @@ fn app_icon() -> tauri::image::Image<'static> {
 }
 
 pub fn run() {
-    tauri::Builder::default()
-        .plugin(
-            tauri_plugin_autostart::Builder::new()
-                .app_name(if cfg!(debug_assertions) {
-                    "51CodeTodo Development"
-                } else {
-                    "51CodeTodo"
-                })
-                .arg("--autostart")
-                .build(),
-        )
+    let mut builder = tauri::Builder::default();
+    #[cfg(windows)]
+    {
+        builder = builder
+            .plugin(
+                tauri_plugin_autostart::Builder::new()
+                    .app_name(if cfg!(debug_assertions) {
+                        "51CodeTodo Development"
+                    } else {
+                        "51CodeTodo"
+                    })
+                    .arg("--autostart")
+                    .build(),
+            )
+            .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+                show_window(app)
+            }));
+    }
+    builder
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
-            show_window(app)
-        }))
         .setup(|app| {
             let base = app.path().app_local_data_dir()?;
             let data_dir = if cfg!(debug_assertions) {
@@ -71,14 +86,21 @@ pub fn run() {
             };
             app.manage(StorageState::open(data_dir.clone()));
             app.manage(file_commands::PendingFiles::default());
+            #[cfg(windows)]
             app.manage(floating::FloatingState::default());
+            #[cfg(windows)]
             let window_geometry = Arc::new(window_geometry::WindowGeometryState::default());
+            #[cfg(windows)]
             window_geometry::configure(&window_geometry, &data_dir);
+            #[cfg(windows)]
             app.manage(window_geometry);
+            #[cfg(windows)]
             app.manage(context_menu::ContextMenuState::default());
             app.manage(updates::UpdateState::default());
             app.manage(sync::MemberCache::default());
+            #[cfg(windows)]
             floating::create(app.handle())?;
+            #[cfg(windows)]
             context_menu::create(app.handle())?;
             let start_minimized = {
                 let state = app.state::<StorageState>();
@@ -89,6 +111,7 @@ pub fn run() {
                     .and_then(|storage| storage.repo.settings().ok())
                     .is_some_and(|settings| settings.start_minimized)
             };
+            #[cfg(windows)]
             TrayIconBuilder::new()
                 .icon(app_icon())
                 .tooltip("51CodeTodo 待办")
@@ -118,6 +141,7 @@ pub fn run() {
                     }
                 })
                 .build(app)?;
+            #[cfg(windows)]
             if let Some(window) = app.get_webview_window("main") {
                 window_geometry::restore(app.handle(), &data_dir);
                 let _ = window.set_icon(app_icon());
@@ -138,10 +162,12 @@ pub fn run() {
             auto_backup::run_on_start(app.handle());
             reminders::start(app.handle().clone());
             sync::start(app.handle().clone());
+            #[cfg(windows)]
             let _ = floating::refresh(app.handle());
             Ok(())
         })
         .on_window_event(|window, event| {
+            #[cfg(windows)]
             if window.label() == "main"
                 && matches!(
                     event,
@@ -153,6 +179,7 @@ pub fn run() {
                     let _ = floating::refresh(&app);
                 });
             }
+            #[cfg(windows)]
             if window.label() == "main"
                 && matches!(
                     event,
@@ -164,6 +191,7 @@ pub fn run() {
                     .state::<Arc<window_geometry::WindowGeometryState>>();
                 window_geometry::remember(&window, state.inner());
             }
+            #[cfg(windows)]
             if window.label() == "main"
                 && matches!(event, tauri::WindowEvent::CloseRequested { .. })
             {
@@ -193,12 +221,14 @@ pub fn run() {
                 }
                 api.prevent_close();
                 let _ = window.hide();
+                #[cfg(windows)]
                 if window.label() == "main" {
                     let _ = floating::refresh(window.app_handle());
                 }
             }
         })
         .invoke_handler({
+            #[cfg(windows)]
             let shared: fn(tauri::ipc::Invoke<tauri::Wry>) -> bool = tauri::generate_handler![
                 updates::pometodo_check_update,
                 updates::pometodo_download_update,
@@ -246,6 +276,60 @@ pub fn run() {
                 smart_arrange::pometodo_set_smart_arrange,
                 clipboard::pometodo_save_clipboard_attachment,
                 clipboard::pometodo_import_attachment,
+                sync::pometodo_sync_config_get,
+                sync::pometodo_sync_config_update,
+                sync::pometodo_sync_join,
+                sync::pometodo_sync_now,
+                sync::pometodo_sync_members,
+            ];
+            #[cfg(not(windows))]
+            let shared: fn(tauri::ipc::Invoke<tauri::Wry>) -> bool = tauri::generate_handler![
+                updates::pometodo_check_update,
+                updates::pometodo_download_update,
+                updates::pometodo_install_update,
+                commands::pometodo_app_info,
+                settings_commands::pometodo_settings_load,
+                settings_commands::pometodo_settings_update,
+                settings_commands::pometodo_customer_rename,
+                settings_commands::pometodo_customer_hide,
+                settings_commands::pometodo_key_save,
+                settings_commands::pometodo_key_clear,
+                mobile_stub::pometodo_choose_directory,
+                mobile_stub::pometodo_apply_directory,
+                mobile_stub::pometodo_export_backup,
+                mobile_stub::pometodo_export_markdown,
+                mobile_stub::pometodo_choose_backup_import,
+                file_commands::pometodo_import_backup,
+                mobile_stub::pometodo_float_expand,
+                mobile_stub::pometodo_float_present,
+                mobile_stub::pometodo_float_preview_state,
+                mobile_stub::pometodo_float_menu,
+                mobile_stub::pometodo_open_main,
+                mobile_stub::pometodo_menu_snapshot,
+                mobile_stub::pometodo_menu_present,
+                mobile_stub::pometodo_menu_action,
+                commands::pometodo_set_theme,
+                commands::pometodo_list_tasks,
+                commands::pometodo_create_task,
+                commands::pometodo_update_task,
+                commands::pometodo_set_status,
+                commands::pometodo_set_urgent,
+                commands::pometodo_set_assignee,
+                commands::pometodo_archive_task,
+                commands::pometodo_unarchive_task,
+                commands::pometodo_set_reminder,
+                commands::pometodo_poll_reminders,
+                commands::pometodo_snooze_reminder,
+                commands::pometodo_cancel_reminder,
+                commands::pometodo_delete_task,
+                commands::pometodo_attachment_data_url,
+                commands::pometodo_open_attachment,
+                mobile_stub::pometodo_recognize_clipboard,
+                mobile_stub::pometodo_recognize_attachment,
+                smart_arrange::pometodo_smart_arrange_state,
+                smart_arrange::pometodo_set_smart_arrange,
+                mobile_stub::pometodo_save_clipboard_attachment,
+                mobile_stub::pometodo_import_attachment,
                 sync::pometodo_sync_config_get,
                 sync::pometodo_sync_config_update,
                 sync::pometodo_sync_join,

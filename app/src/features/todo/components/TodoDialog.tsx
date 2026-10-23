@@ -122,6 +122,38 @@ export default function TodoDialog({
   }, [showingAccount]);
   const fileInput = useRef<HTMLInputElement>(null);
   const [draggingFiles, setDraggingFiles] = useState(false);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const startVoice = () => {
+    const w = window as any;
+    const Ctor = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!Ctor) {
+      alert("当前系统浏览器不支持语音输入，请升级 WebView 或使用 Chrome");
+      return;
+    }
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    const rec = new Ctor();
+    recognitionRef.current = rec;
+    rec.lang = "zh-CN";
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onresult = (event: any) => {
+      const text: string = event.results?.[0]?.[0]?.transcript ?? "";
+      if (!text.trim()) return;
+      navigator.clipboard?.writeText(text).catch(() => {});
+      onNoteInput(text);
+      onRecognize();
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    rec.start();
+    setListening(true);
+  };
 
   // 备注高度随内容自适应（最多约三行，超出内部滚动）；识别回填与手动输入共用。
   useLayoutEffect(() => {
@@ -292,6 +324,17 @@ export default function TodoDialog({
         <div className="todo-dialog-header">
           <h3 className="dialog-title">{editing ? "编辑待办" : "新增待办"}</h3>
           <div className="todo-dialog-header-actions">
+            <button
+              className={`todo-voice-btn${listening ? " listening" : ""}`}
+              type="button"
+              onClick={startVoice}
+              disabled={saving || addingAttachment}
+              aria-label={listening ? "停止语音" : "语音输入"}
+              title="说一句话，自动整理成待办"
+            >
+              <span aria-hidden="true">{listening ? "■" : "🎤"}</span>
+              <span>{listening ? "正在听…" : "语音"}</span>
+            </button>
             <button ref={recognizeButton} className={`todo-recognize-btn ${smartArrangeToneClass(smartArrangeTone)}`} type="button" onClick={onRecognize} disabled={recognizing || saving || addingAttachment} aria-label={recognitionLabel} title={smartArrangeAvailable ? "读取剪贴板中的文字或截图，自动填写待办" : recognitionLabel}>
               {recognizing ? todoIcons.spinner : todoIcons.clipboard}<span>{recognitionLabel}</span>
             </button>

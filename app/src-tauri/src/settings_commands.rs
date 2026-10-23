@@ -6,6 +6,7 @@ use pometodo_core::{
 use serde::Serialize;
 use std::collections::BTreeMap;
 use tauri::Emitter;
+#[cfg(windows)]
 use tauri_plugin_autostart::ManagerExt;
 
 #[derive(Serialize)]
@@ -30,10 +31,13 @@ pub(crate) fn snapshot(
         key_configured.insert(provider.into(), keys.configured(provider)?);
     }
     let mut settings = repo.settings()?;
-    settings.start_with_windows = app
-        .autolaunch()
-        .is_enabled()
-        .map_err(|_| "无法读取 Windows 开机启动状态")?;
+    #[cfg(windows)]
+    {
+        settings.start_with_windows = app
+            .autolaunch()
+            .is_enabled()
+            .map_err(|_| "无法读取 Windows 开机启动状态")?;
+    }
     Ok(SettingsSnapshot {
         settings,
         customers: repo.customers()?,
@@ -61,34 +65,40 @@ pub async fn pometodo_settings_update(
         let repo = &mut storage.repo;
         let previous = result.settings.clone();
         let next = previous.patched(patch.clone())?;
-        let autolaunch = app_copy.autolaunch();
-        let was_enabled = autolaunch
-            .is_enabled()
-            .map_err(|_| "无法读取 Windows 开机启动状态")?;
-        let change_autostart =
-            patch.get("startWithWindows").is_some() && was_enabled != next.start_with_windows;
-        if change_autostart {
-            if next.start_with_windows {
-                autolaunch.enable()
-            } else {
-                autolaunch.disable()
-            }
-            .map_err(|_| "Windows 未能更改开机启动设置")?;
-        }
-        if let Err(error) = repo.update_settings(patch) {
+        #[cfg(windows)]
+        {
+            let autolaunch = app_copy.autolaunch();
+            let was_enabled = autolaunch
+                .is_enabled()
+                .map_err(|_| "无法读取 Windows 开机启动状态")?;
+            let change_autostart =
+                patch.get("startWithWindows").is_some() && was_enabled != next.start_with_windows;
             if change_autostart {
-                let rollback = if was_enabled {
+                if next.start_with_windows {
                     autolaunch.enable()
                 } else {
                     autolaunch.disable()
-                };
-                if rollback.is_err() {
-                    return Err(format!("{error}；开机启动状态未能还原，请重新检查设置"));
                 }
+                .map_err(|_| "Windows 未能更改开机启动设置")?;
             }
-            return Err(error);
+            if let Err(error) = repo.update_settings(patch) {
+                if change_autostart {
+                    let rollback = if was_enabled {
+                        autolaunch.enable()
+                    } else {
+                        autolaunch.disable()
+                    };
+                    if rollback.is_err() {
+                        return Err(format!("{error}；开机启动状态未能还原，请重新检查设置"));
+                    }
+                }
+                return Err(error);
+            }
         }
+        #[cfg(not(windows))]
+        repo.update_settings(patch)?;
         result.settings = next;
+        #[cfg(windows)]
         if !change_autostart {
             result.settings.start_with_windows = was_enabled;
         }
@@ -99,9 +109,12 @@ pub async fn pometodo_settings_update(
         "pometodo-floating-enabled",
         result.settings.floating_ball_enabled,
     );
-    crate::window_effects::apply(&app, &result.settings);
-    if let Err(error) = crate::floating::refresh(&app) {
-        let _ = app.emit("pometodo-system-error", error);
+    #[cfg(windows)]
+    {
+        crate::window_effects::apply(&app, &result.settings);
+        if let Err(error) = crate::floating::refresh(&app) {
+            let _ = app.emit("pometodo-system-error", error);
+        }
     }
     Ok(result)
 }

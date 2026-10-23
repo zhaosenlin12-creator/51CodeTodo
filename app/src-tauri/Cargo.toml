@@ -30,12 +30,12 @@ sha2 = "=0.10.9"
 chrono = "0.4"
 uuid = { version = "1", features = ["v4"] }
 base64 = "0.22"
-arboard = "=3.6.1"
-clipboard-win = "=5.4.1"
 image = { version = "=0.25.10", default-features = false, features = ["png"] }
-reqwest = { version = "=0.12.28", default-features = false, features = ["blocking", "json", "native-tls", "system-proxy"] }
+reqwest = { version = "=0.12.28", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 
 [target.'cfg(windows)'.dependencies]
+arboard = "=3.6.1"
+clipboard-win = "=5.4.1"
 windows = { version = "=0.58.0", features = [
   "Foundation", "Foundation_Collections", "Globalization", "Graphics_Imaging", "Media_Ocr",
   "Storage_Streams", "Win32_System_WinRT", "Win32_Security_Cryptography", "Win32_System_Memory",

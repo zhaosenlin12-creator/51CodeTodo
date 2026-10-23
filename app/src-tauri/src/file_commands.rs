@@ -101,6 +101,7 @@ pub struct ExportResult {
     message: String,
 }
 
+#[cfg(windows)]
 #[tauri::command]
 pub async fn pometodo_choose_directory(
     app: tauri::AppHandle,
@@ -148,6 +149,7 @@ pub async fn pometodo_choose_directory(
     .await
 }
 
+#[cfg(windows)]
 #[tauri::command]
 pub async fn pometodo_apply_directory(
     app: tauri::AppHandle,
@@ -177,6 +179,7 @@ pub async fn pometodo_apply_directory(
     .await
 }
 
+#[cfg(windows)]
 #[tauri::command]
 pub async fn pometodo_export_backup(app: tauri::AppHandle) -> Result<Option<ExportResult>, String> {
     let app_copy = app.clone();
@@ -210,6 +213,7 @@ pub async fn pometodo_export_backup(app: tauri::AppHandle) -> Result<Option<Expo
     .await
 }
 
+#[cfg(windows)]
 #[tauri::command]
 pub async fn pometodo_export_markdown(app: tauri::AppHandle) -> Result<Option<ExportResult>, String> {
     let app_copy = app.clone();
@@ -246,6 +250,7 @@ pub async fn pometodo_export_markdown(app: tauri::AppHandle) -> Result<Option<Ex
     .await
 }
 
+#[cfg(windows)]
 #[tauri::command]
 pub async fn pometodo_choose_backup_import(
     app: tauri::AppHandle,
@@ -318,6 +323,7 @@ pub async fn pometodo_import_backup(
         })
     })
     .await?;
+    #[cfg(windows)]
     if let Err(error) = crate::floating::refresh(&app) {
         let _ = app.emit("pometodo-system-error", error);
     }

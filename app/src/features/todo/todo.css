@@ -1086,3 +1086,17 @@
 .pometodo-todo .todo-reminder-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .pometodo-todo .todo-reminder-btn { flex: 1; min-width: 72px; height: 30px; border: 1px solid var(--separator); border-radius: 8px; background: var(--input-bg); color: var(--text-primary); font: 400 12.5px/28px var(--font); cursor: pointer; }
 .pometodo-todo .todo-reminder-btn:hover { border-color: var(--accent-border); color: var(--accent); }
+
+/* 语音输入按钮 */
+.todo-voice-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border,#e2e2e8);background:#fff;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+.todo-voice-btn.listening{background:#ffe5e5;border-color:#ff6b6b;color:#d33}
+.todo-voice-btn:disabled{opacity:.5}
+
+/* 移动端适配 */
+@media (max-width: 640px){
+  .todo-editor-scroll{max-height:92vh}
+  .todo-task-editor{width:100vw !important;max-width:100vw !important;border-radius:0 !important;padding:14px}
+  .todo-dialog-header-actions{flex-wrap:wrap;gap:6px}
+  .todo-dialog-date-grid{grid-template-columns:1fr !important}
+  .dialog-input,.dialog-textarea{font-size:16px !important}
+}

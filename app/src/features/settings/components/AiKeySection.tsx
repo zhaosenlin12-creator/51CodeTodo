@@ -59,7 +59,7 @@ export default function AiKeySection({
       <div className="settings-input-row">
         <input
           className="settings-input settings-input-key"
-          type="password"
+          type="text"
           autoComplete="off"
           spellCheck={false}
           placeholder={configured ? `${currentProvider.keyLabel} Key 已保存` : `粘贴 ${currentProvider.keyLabel} API Key`}

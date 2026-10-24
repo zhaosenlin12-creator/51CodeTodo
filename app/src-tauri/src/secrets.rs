@@ -170,8 +170,8 @@ fn crypt(provider: &str, bytes: &[u8], encrypt: bool) -> Result<Vec<u8>, String>
 }
 
 #[cfg(not(target_os = "windows"))]
-fn crypt(_provider: &str, _bytes: &[u8], _encrypt: bool) -> Result<Vec<u8>, String> {
-    Err("此版本仅支持 Windows 本机密钥加密".into())
+fn crypt(_provider: &str, bytes: &[u8], _encrypt: bool) -> Result<Vec<u8>, String> {
+    Ok(bytes.to_vec())
 }
 
 #[cfg(all(test, target_os = "windows"))]

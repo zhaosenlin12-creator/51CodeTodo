@@ -98,6 +98,8 @@ export interface TodoServices {
   cancelReminder?(instanceId: string): Promise<void>;
   deleteTask(id: string): Promise<void>;
   recognizeClipboard(): Promise<TodoRecognitionResult>;
+  /** 移动端：直接对文本做 AI 整理（读不了系统剪贴板时用）。 */
+  arrangeText(text: string): Promise<TodoRecognitionResult>;
   /** 识别附件箱中指定截图（附件优先）。 */
   recognizeAttachment(id: string): Promise<TodoRecognitionResult>;
   saveClipboardAttachment(): Promise<string | null>;

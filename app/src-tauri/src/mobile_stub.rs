@@ -9,6 +9,11 @@ pub async fn pometodo_recognize_clipboard() -> Result<(), String> {
 }
 
 #[tauri::command]
+pub async fn pometodo_arrange_text(_app: tauri::AppHandle, _text: String) -> Result<serde_json::Value, String> {
+    Err("移动端智能整理开发中，请在电脑端使用".into())
+}
+
+#[tauri::command]
 pub async fn pometodo_recognize_attachment(_state: State<'_, StorageState>, _path: String) -> Result<(), String> {
     Err("当前平台暂不支持附件识别".into())
 }

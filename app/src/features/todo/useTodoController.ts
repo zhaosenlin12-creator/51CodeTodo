@@ -81,6 +81,7 @@ export interface TodoControllerCore {
   cancelReminder(instanceId: string): Promise<TodoWriteResult>;
   deleteTask(id: string): Promise<TodoWriteResult>;
   recognizeClipboard(): Promise<TodoRecognitionOutcome | null>;
+  arrangeText(text: string): Promise<TodoRecognitionOutcome | null>;
   /** 识别附件箱中指定截图（附件优先，替代读剪贴板）。 */
   recognizeAttachment(id: string): Promise<TodoRecognitionOutcome | null>;
   saveClipboardAttachment(): Promise<TodoAttachmentSaveResult>;
@@ -354,6 +355,25 @@ export function createTodoControllerCore(services: TodoServices): TodoController
       patch({ recognizing: true });
       try {
         const result = await services.recognizeClipboard();
+        if (result.kind === "ai") return result;
+        if (result.kind === "local") {
+          return { kind: "local", draft: result.draft, message: result.message };
+        }
+        return { kind: "empty", message: result.message };
+      } catch (error) {
+        return {
+          kind: "error",
+          message: readableTodoError(error, todoTexts.recognizeClipboardFailure),
+        };
+      } finally {
+        patch({ recognizing: false });
+      }
+    },
+    async arrangeText(text: string) {
+      if (state.recognizing || state.saving) return null;
+      patch({ recognizing: true });
+      try {
+        const result = await services.arrangeText(text);
         if (result.kind === "ai") return result;
         if (result.kind === "local") {
           return { kind: "local", draft: result.draft, message: result.message };

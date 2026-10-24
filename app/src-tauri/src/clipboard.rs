@@ -1081,3 +1081,22 @@ pub async fn pometodo_recognize_attachment(
     .await
     .map_err(|_| "读取附件识别未完成".to_string())?
 }
+
+/// 移动端：直接对传入的文本做 AI 整理（读不了系统剪贴板时用）。
+#[tauri::command]
+pub async fn pometodo_arrange_text(
+    app: tauri::AppHandle,
+    text: String,
+) -> Result<RecognitionResult, String> {
+    let permit = RecognitionPermit::acquire()?;
+    tauri::async_runtime::spawn_blocking(move || {
+        let _permit = permit;
+        let result = run_recognition(&app, || {
+            Ok(ClipboardInput { text, attachment: None })
+        });
+        trace_recognition(&app, "arrange_text", None, &result);
+        result
+    })
+    .await
+    .map_err(|_| "文本整理未完成".to_string())?
+}

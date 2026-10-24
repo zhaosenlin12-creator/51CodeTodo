@@ -28,6 +28,8 @@ function makeServices(overrides: Partial<TodoServices> = {}): TodoServices {
     deleteTask: () => Promise.resolve(),
     recognizeClipboard: () =>
       Promise.resolve({ kind: "empty", message: "剪贴板没有可用内容" }),
+    arrangeText: () =>
+      Promise.resolve({ kind: "empty", message: "文本整理未完成" }),
     recognizeAttachment: () =>
       Promise.resolve({ kind: "empty", message: "附件识别未完成" }),
     saveClipboardAttachment: () => Promise.resolve(null),

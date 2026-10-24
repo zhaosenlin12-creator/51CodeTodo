@@ -249,6 +249,35 @@ export default function TodoPage({ services, onOpenAttachment, onImportAttachmen
     }
     setRecognitionView({ kind: "error", message: outcome.message });
     setNotice({ tone: "warn", text: outcome.message || todoTexts.recognizeClipboardFailure });
+    try {
+      const text = await navigator.clipboard?.readText?.();
+      if (text && text.trim()) {
+        const fb = await core.arrangeText(text);
+        if (fb && seq === recognitionSeqRef.current && fb.kind === "ai") {
+          applyRecognition(fb.draft);
+          if (fb.draft.note) setNotePulse(v => v + 1);
+          setRecognitionView({ kind: "ai" });
+        }
+      }
+    } catch {}
+  }, [applyRecognition, core, smartArrangeAvailable]);
+
+  const runArrangeText = useCallback(async (text: string) => {
+    if (!smartArrangeAvailable || core.getState().recognizing || core.getState().saving) return;
+    const seq = recognitionSeqRef.current + 1;
+    recognitionSeqRef.current = seq;
+    setRecognitionView({ kind: "loading" });
+    const outcome = await core.arrangeText(text);
+    if (!outcome || seq !== recognitionSeqRef.current) return;
+    if (outcome.kind === "ai") {
+      applyRecognition(outcome.draft);
+      if (outcome.draft.note) setNotePulse(v => v + 1);
+      setRecognitionView({ kind: "ai" });
+      setNotice(outcome.message ? { tone: "info", text: outcome.message } : null);
+      return;
+    }
+    setRecognitionView({ kind: "error", message: outcome.message });
+    setNotice({ tone: "warn", text: outcome.message || todoTexts.recognizeClipboardFailure });
   }, [applyRecognition, core, smartArrangeAvailable]);
 
   const openCreateDialog = useCallback(
@@ -730,6 +759,7 @@ export default function TodoPage({ services, onOpenAttachment, onImportAttachmen
     smartArrangeTone={smartArrangeTone}
     accountView={loginPanel}
     onRecognize={() => { if (smartArrangeAvailable) void runRecognize(); else onEnableSmartArrange?.(); }}
+    onVoiceArrange={(text) => { if (smartArrangeAvailable) void runArrangeText(text); }}
     onImportAttachments={(files) => void importDialogAttachments(files)}
     onRemoveAttachment={removeDialogAttachment} onOpenAttachment={(path) => void openAttachment(path)}
   />;

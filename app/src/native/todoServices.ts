@@ -27,6 +27,7 @@ export function createTodoServices(invoke: InvokeCommand): TodoServices {
     cancelReminder: (instanceId) => call("pometodo_cancel_reminder", { instanceId }),
     deleteTask: (id) => call("pometodo_delete_task", { id }),
     recognizeClipboard: () => call("pometodo_recognize_clipboard"),
+    arrangeText: (text: string) => call("pometodo_arrange_text", { text }),
     recognizeAttachment: (id: string) => call("pometodo_recognize_attachment", { id }),
     saveClipboardAttachment: () => call("pometodo_save_clipboard_attachment"),
     getAttachmentDataUrl: (path) => call("pometodo_attachment_data_url", { path }),

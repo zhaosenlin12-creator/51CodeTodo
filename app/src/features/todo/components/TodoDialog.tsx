@@ -68,6 +68,7 @@ interface TodoDialogProps {
   onSave: () => void;
   onDelete: () => void;
   onRecognize: () => void;
+  onVoiceArrange?: (text: string) => void;
   onImportAttachments: (files: File[]) => void;
   onRemoveAttachment: (path: string) => void;
   onOpenAttachment: (path: string) => void;
@@ -100,6 +101,7 @@ export default function TodoDialog({
   onSave,
   onDelete,
   onRecognize,
+  onVoiceArrange,
   onImportAttachments,
   onRemoveAttachment,
   onOpenAttachment,
@@ -172,8 +174,12 @@ export default function TodoDialog({
       onTitleInput(finalText.trim());
       requestAnimationFrame(placeCaret);
       if (smartArrangeAvailable && finalizedSoFar.trim()) {
-        navigator.clipboard?.writeText(finalText).catch(() => {});
-        setTimeout(() => onRecognize(), 500);
+        if (onVoiceArrange) {
+          onVoiceArrange(finalizedSoFar.trim());
+        } else {
+          navigator.clipboard?.writeText(finalText).catch(() => {});
+          setTimeout(() => onRecognize(), 500);
+        }
       }
     };
     rec.onerror = () => setListening(false);

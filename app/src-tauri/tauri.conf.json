@@ -30,7 +30,7 @@
     }
   },
   "bundle": {
-    "active": false,
+    "active": true,
     "targets": ["nsis"],
     "shortDescription": "轻量本地待办",
     "windows": { "nsis": { "installMode": "currentUser", "languages": ["SimpChinese"] } }

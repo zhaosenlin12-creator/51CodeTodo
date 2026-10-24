@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "51CodeTodo",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "identifier": "com.pome.todo",
   "build": {
     "beforeDevCommand": "corepack pnpm dev",

@@ -11,6 +11,7 @@
 
 ### 智能整理（自带 Key）
 - 粘贴一段文字或一张截图，AI 自动整理成结构化待办草稿，核对后再保存。
+- 🎤 **语音输入**：在新增待办弹窗点「语音」直接说话，连续识别、光标自动跟随，说完自动走 AI 整理填好时间/分类。
 - 自带 Key（BYOK）模式，支持 MiniMax、DeepSeek、通义千问、智谱 GLM。
 - 配置多个 Key 时自动故障切换：当前服务商失败或额度不足，自动切到下一个可用 Key。
 - 图片直传失败时自动回退本机 OCR 文字识别，整理链路不中断。
@@ -27,10 +28,11 @@
 
 ## 下载使用
 
-普通用户直接在 [Releases 页面](https://github.com/zhaosenlin12-creator/51CodeTodo/releases/latest) 下载最新 Windows 安装包（`.exe`），双击安装即可，本地任务与设置会被保留。
+普通用户直接在 [Releases 页面](https://github.com/zhaosenlin12-creator/51CodeTodo/releases/latest) 下载对应平台的安装包：
 
-- 安装版：`51CodeTodo-x.y.z-setup.exe`，一键安装、开机常驻可选。
-- 便携版：解压即用，适合不安装的场景。
+- **Windows**：下载 `51CodeTodo-x.y.z-setup.exe`，双击安装，本地任务与设置会被保留。
+- **安卓**：下载 `51CodeTodo-android-arm64.apk`，传到手机安装（支持 arm64 真机）。
+- **iOS**：需 Mac + Xcode 自行打包，暂未提供 IPA。
 
 ## 本地开发
 

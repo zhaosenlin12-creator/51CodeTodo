@@ -208,7 +208,7 @@ export default function TodoPage({ services, onOpenAttachment, onImportAttachmen
       const next = applyTodoRecognitionDraft(current, recognized);
       return {
         ...next,
-        receivedAt: toTodoDateInputValue(next.receivedAt),
+        receivedAt: next.receivedAt ? toTodoDateInputValue(next.receivedAt) : current.receivedAt,
         dueAt: toTodoDateInputValue(next.dueAt),
       };
     });

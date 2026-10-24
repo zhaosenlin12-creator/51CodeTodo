@@ -94,14 +94,13 @@ pub async fn pometodo_settings_update(
                 }
                 return Err(error);
             }
+            if !change_autostart {
+                result.settings.start_with_windows = was_enabled;
+            }
         }
         #[cfg(not(windows))]
         repo.update_settings(patch)?;
         result.settings = next;
-        #[cfg(windows)]
-        if !change_autostart {
-            result.settings.start_with_windows = was_enabled;
-        }
         Ok(result)
     })
     .await?;

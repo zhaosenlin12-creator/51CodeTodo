@@ -55,6 +55,7 @@ fn app_icon() -> tauri::image::Image<'static> {
     tauri::image::Image::new_owned(image.into_raw(), width, height)
 }
 
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let mut builder = tauri::Builder::default();
     #[cfg(windows)]

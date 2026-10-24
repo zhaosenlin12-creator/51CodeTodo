@@ -107,6 +107,7 @@ export default function TodoDialog({
   const pack = wordPackFor(customerLabel);
   const dueWords = dueWordsFor(pack.dueWord);
   const noteRef = useRef<HTMLTextAreaElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
   const noteFlashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [noteFlash, setNoteFlash] = useState(false);
   const [activeDateField, setActiveDateField] = useState<TodoDialogDateField | null>(null);
@@ -140,16 +141,41 @@ export default function TodoDialog({
     const rec = new Ctor();
     recognitionRef.current = rec;
     rec.lang = "zh-CN";
-    rec.interimResults = false;
+    rec.interimResults = true;
+    rec.continuous = true;
     rec.maxAlternatives = 1;
-    rec.onresult = (event: any) => {
-      const text: string = event.results?.[0]?.[0]?.transcript ?? "";
-      if (!text.trim()) return;
-      navigator.clipboard?.writeText(text).catch(() => {});
-      onNoteInput(text);
-      onRecognize();
+    const baseTitle = draft.title ?? "";
+    let finalizedSoFar = "";
+    const placeCaret = () => {
+      const el = titleRef.current;
+      if (!el) return;
+      el.focus();
+      const len = el.value.length;
+      try { el.setSelectionRange(len, len); } catch {}
+      el.scrollLeft = el.scrollWidth;
     };
-    rec.onend = () => setListening(false);
+    rec.onresult = (event: any) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const res = event.results[i];
+        const t = res[0]?.transcript ?? "";
+        if (res.isFinal) finalizedSoFar += t;
+        else interim += t;
+      }
+      const combined = (baseTitle ? baseTitle + " " : "") + finalizedSoFar + interim;
+      onTitleInput(combined.trim());
+      requestAnimationFrame(placeCaret);
+    };
+    rec.onend = () => {
+      setListening(false);
+      const finalText = (baseTitle ? baseTitle + " " : "") + finalizedSoFar;
+      onTitleInput(finalText.trim());
+      requestAnimationFrame(placeCaret);
+      if (smartArrangeAvailable && finalizedSoFar.trim()) {
+        navigator.clipboard?.writeText(finalText).catch(() => {});
+        setTimeout(() => onRecognize(), 500);
+      }
+    };
     rec.onerror = () => setListening(false);
     rec.start();
     setListening(true);
@@ -351,6 +377,7 @@ export default function TodoDialog({
               aria-invalid={!draft.title.trim()}
               placeholder=""
               aria-label={pack.titleLabel}
+            ref={(el) => { titleRef.current = el; }}
               value={draft.title}
               onChange={(event) => onTitleInput(event.target.value)}
             />

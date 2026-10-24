@@ -80,6 +80,22 @@ export default function AiKeySection({
         <button
           className="settings-button"
           type="button"
+          disabled={busy}
+          title="从剪贴板粘贴"
+          onClick={async () => {
+            try {
+              const text = await navigator.clipboard.readText();
+              if (text) onDraftChange(draft ? draft + text : text);
+            } catch {
+              alert("读取剪贴板失败，请长按输入框选择粘贴");
+            }
+          }}
+        >
+          粘贴
+        </button>
+        <button
+          className="settings-button"
+          type="button"
           disabled={busy || !configured}
           data-unavailable={!configured || undefined}
           onClick={onRequestClearKey}

@@ -76,6 +76,8 @@ export default function TodoPage({ services, onOpenAttachment, onImportAttachmen
   const [draft, setDraft] = useState<TodoDraftFields>(() => createEmptyDraft());
   const attachmentPathsRef = useRef<string[]>([]);
   attachmentPathsRef.current = draft.attachmentPaths;
+  const draftRef = useRef(draft);
+  draftRef.current = draft;
   const [titleError, setTitleError] = useState(false);
   const [recognitionView, setRecognitionView] = useState<TodoRecognitionView>({ kind: "idle" });
   const [notePulse, setNotePulse] = useState(0);
@@ -249,14 +251,17 @@ export default function TodoPage({ services, onOpenAttachment, onImportAttachmen
     }
     setRecognitionView({ kind: "error", message: outcome.message });
     setNotice({ tone: "warn", text: outcome.message || todoTexts.recognizeClipboardFailure });
+    // 移动端读不了系统剪贴板：直接拿已输入的标题/备注文字整理
     try {
-      const text = await navigator.clipboard?.readText?.();
-      if (text && text.trim()) {
+      const current = draftRef.current;
+      const text = `${current?.title ?? ""} ${current?.note ?? ""}`.trim();
+      if (text) {
         const fb = await core.arrangeText(text);
         if (fb && seq === recognitionSeqRef.current && fb.kind === "ai") {
           applyRecognition(fb.draft);
           if (fb.draft.note) setNotePulse(v => v + 1);
           setRecognitionView({ kind: "ai" });
+          return;
         }
       }
     } catch {}
